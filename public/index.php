@@ -1,5 +1,8 @@
 <?php
 
+session_start();
+
+
 require_once '../app/core/Router.php';
 require_once '../app/controllers/StudentController.php';
 
@@ -17,6 +20,8 @@ $router->get('/student/dashboard', 'StudentController@dashboard');
 
 // Lancer le routage
 $router->dispatch($uri);
+
+$router->get('/logout', 'StudentController@logout');
 
 
 

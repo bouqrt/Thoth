@@ -24,3 +24,21 @@ class StudentController extends Controller
         echo "Accueil Thoth";
     }
 }
+
+require_once '../app/core/Auth.php';
+
+public function dashboard() 
+{
+    if (!Auth::check()) {
+        header('Location: /login');
+        exit;
+    }
+
+    $this->view('student/dashboard');
+}
+
+public function logout()
+{
+    Auth::logout();
+    header('Location: /login');
+}
