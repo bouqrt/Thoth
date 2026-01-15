@@ -1,24 +1,26 @@
 <?php
 
-class StudentController
-{
-    public function home()
-    {
-        echo "Page d'accueil";
-    }
+require_once '../app/core/Controller.php';
 
+class StudentController extends Controller
+{
     public function login()
     {
-        echo "Page de connexion";
+        $this->view('student/login');
     }
 
     public function register()
     {
-        echo "Page d'inscription";
+        $this->view('student/register');
     }
 
     public function dashboard()
     {
-        echo "Dashboard étudiant";
+        $this->view('student/dashboard');
+    }
+
+    public function home()
+    {
+        echo "Accueil Thoth";
     }
 }
