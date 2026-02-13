@@ -1,73 +1,39 @@
-
-
 <?php
 
 class Router
 {
-    private array $routes = [];
+    private $routes = [];
 
-    public function get(string $path, string $action): void
+    public function get($uri, $action)
     {
-        $this->routes[$path] = $action;
+        $this->routes['GET'][$uri] = $action;
     }
 
-    public function dispatch(string $uri): void
+    public function post($uri, $action)
     {
-        if (!isset($this->routes[$uri])) {
+        $this->routes['POST'][$uri] = $action;
+    }
+
+    public function dispatch()
+    {
+        $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+        $method = $_SERVER['REQUEST_METHOD'];
+
+        $uri = str_replace('/thoth/public', '', $uri);
+        if ($uri === '') {
+            $uri = '/';
+        }
+
+        if (!isset($this->routes[$method][$uri])) {
             http_response_code(404);
             echo "404 - Page non trouvée";
             return;
         }
 
-        // Séparer Controller et méthode
-        [$controllerName, $method] = explode('@', $this->routes[$uri]);
+        [$controller, $methodAction] = explode('@', $this->routes[$method][$uri]);
 
-        $controller = new $controllerName();
-
-        $controller->$method();
+        require_once "../app/controllers/$controller.php";
+        $controllerInstance = new $controller();
+        $controllerInstance->$methodAction();
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// namespace App\core;
-// class Router {
-
-//     private $route =[];
-
-//     public function route($path, $callback){
-//         $this->route[$path]= $callback;
-//     }
-
-//     public function dispatch(){
-//         $url =$_SERVER['REQUEST_URL'];
-        
-//         //echo "<pre>";
-//         //var_dump ($_SERVER['REQUEST_URL']);
-//         //echo"</pre>"
-
-//     };
-
-// }
